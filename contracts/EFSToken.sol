@@ -84,7 +84,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v5.0
       return true;
     }
 
-      function transferFrom(address sender, address recipient, uint256 amount) public virtual  returns (bool) {
+    function transferFrom(address sender, address recipient, uint256 amount) public virtual  returns (bool) {
         _transfer(sender, recipient, amount);
         return true;
     }
@@ -94,7 +94,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v5.0
         return true;
     }
 
-      function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
         _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: decreased allowance below zero"));
         return true;
     }
@@ -110,7 +110,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v5.0
         emit Transfer(sender, recipient, amount);
     }
 
-         function _mint(address account, uint256 amount) internal virtual {
+    function _mint(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: mint to the zero address");
 
         _beforeTokenTransfer(address(0), account, amount);
@@ -120,12 +120,17 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v5.0
         emit Transfer(address(0), account, amount);
     }
 
-        function _approve(address owner, address spender, uint256 amount) internal virtual {
+    function _approve(address owner, address spender, uint256 amount) internal virtual {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
+    }
+
+    function mint(address to, uint256 value) public returns(bool){
+        _mint(to, value);
+        return true;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual { }
