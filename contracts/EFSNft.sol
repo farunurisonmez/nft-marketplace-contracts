@@ -10,7 +10,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v5.0
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v5.0/contracts/utils/Context.sol";
 
 
-contract EFSNft is Context, AccessControlEnumerable, ERC721Enumerable, ERC721Pausable   {
+contract EFSNft is Context, ERC721Enumerable {
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
@@ -36,10 +36,6 @@ contract EFSNft is Context, AccessControlEnumerable, ERC721Enumerable, ERC721Pau
         return tokens[token];
     }
 
-
-    function _update(address to, uint256 tokenId, address auth) internal virtual override(ERC721Enumerable, ERC721Pausable) returns (address) {
-    // Implement the necessary functionality here
-}
     
     function mint(address to, uint256 tokenId, string memory tokenURI) public payable {
         require(msg.sender != owner, "You cannot mint your own item.");
@@ -73,20 +69,15 @@ contract EFSNft is Context, AccessControlEnumerable, ERC721Enumerable, ERC721Pau
         multipleMint(msg.sender, tokenURI, num);
     }
 
-    function pause() public virtual {
-        require(hasRole(PAUSER_ROLE, _msgSender()), "ERC721PresetMinterPauserAutoId: must have pauser role to pause");
-        _pause();
-    }
-
-
-    function unpause() public virtual {
-        require(hasRole(PAUSER_ROLE, _msgSender()), "EFSNft: must have pauser role to unpause");
-        _unpause();
-    }
 
     mapping(uint256 => string) private _tokenURIs;
 
     function _setTokenURI(uint256 tokenId, string memory uri) private {
         _tokenURIs[tokenId] = uri;
     }
+
+    function tokenURI(uint256 tokenId) override public view returns (string memory) {
+        return string(abi.encodePacked(_baseTokenURI, _tokenURIs[tokenId]));
+    }
+  
 }
