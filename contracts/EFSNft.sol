@@ -17,4 +17,8 @@ contract EFSNft is Context, ERC721Enumerable  {
     PRICE = 100000000000000000;
     _baseTokenURI = baseTokenURI; // Store the base token URI
     }
+
+    function _baseURI() internal view virtual override returns (string memory) {
+        return _baseTokenURI;
+    }
 }
