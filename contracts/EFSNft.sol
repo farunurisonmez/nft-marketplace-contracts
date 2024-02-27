@@ -21,4 +21,26 @@ contract EFSNft is Context, ERC721Enumerable  {
     function _baseURI() internal view virtual override returns (string memory) {
         return _baseTokenURI;
     }
+
+    mapping(uint256 => uint256) private tokens;
+
+    function getIds(uint256 token) public view returns (uint256){
+        return tokens[token];
+    }
+
+
+    function mint(address to, uint256 tokenId, string memory tokenURI) public payable {
+        require(msg.sender != owner, "You cannot mint your own item.");
+        require(msg.value >= PRICE, "Not enough paid");
+        owner.transfer(msg.value);
+         _mint(to, tokenId);
+        _setTokenURI(tokenId, tokenURI);
+        tokens[tokenId] = tokenId;
+    }
+
+    mapping(uint256 => string) private _tokenURIs;
+
+    function _setTokenURI(uint256 tokenId, string memory uri) private {
+        _tokenURIs[tokenId] = uri;
+    }
 }
